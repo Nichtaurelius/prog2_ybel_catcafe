@@ -1,0 +1,35 @@
+name: Java CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-test-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Java einrichten
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Gradle-Berechtigung setzen
+        run: chmod +x gradlew
+
+      - name: Kompilieren
+        run: ./gradlew compileJava
+
+      - name: Tests ausfuehren
+        run: ./gradlew test
+
+      - name: Formatierung pruefen
+        run: ./gradlew spotlessCheck
